@@ -12,9 +12,6 @@ class TSDeque {
   ~TSDeque() { Clear(); }
 
  public:
-  // Блокируем mutex для того,
-  // чтобы не было race_condition
-  // Возвращаем неизменяемое, потому что объект остаётся в очереди
   const T& Front() {
     std::scoped_lock lock(deque_mutex_);
     return deque_.front();
@@ -38,7 +35,7 @@ class TSDeque {
     deque_.pop_back();
     return t;
   }
-  // unique_lock нужен для пробуждения Wait()
+
   void PushBack(const T& item) {
     std::scoped_lock lock(deque_mutex_);
     deque_.emplace_back(std::move(item));
@@ -50,10 +47,6 @@ class TSDeque {
   void PushFront(const T& item) {
     std::scoped_lock lock(deque_mutex_);
     deque_.emplace_front(std::move(item));
-    // Забирает блокировку у is_pushed.wait(), 
-    // а он не разблокируется, пока этот метод полностью не выплонится,
-    // и не пропадёт вместе с ним scoped_lock, чтобы разбудится в следующий раз на
-    // PushBack() и наоборот
     std::unique_lock<std::mutex> ulock(wait_push_mutex_);
     is_pushed_.notify_one();
   }
@@ -77,7 +70,6 @@ class TSDeque {
   void Wait() {
     while (Empty()) {
       std::unique_lock<std::mutex> ulock(wait_push_mutex_);
-      // Ожидает разблокировав wait_push_mutex_
       is_pushed_.wait(ulock);
     }
   }
