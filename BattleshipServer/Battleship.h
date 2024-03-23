@@ -180,40 +180,6 @@ class Battleship {
     ships_lifes_.push_back(ship_type + 1);
     return true;
   }
-  /*
-  // Рандомная расстановка кораблей на доске
-  void TrueRandomArrangement(uint8_t) {
-    int placed = 0;
-    for (int ship_type = 0; ship_type < THE_BIGGEST_SHIP; ++ship_type) {
-      // Чем больше корабли, тем меньше их количество.
-      for (int ship_iter = 0; ship_iter < THE_BIGGEST_SHIP - ship_type;
-           ++ship_iter) {
-        // Выбор направления
-        bool is_vertical = UniformDist(false, true);
-        // Сокращаем доску, для того, чтобы конец корабля не был за пределами
-        // доски. А выбор позиции, происходит из оставшихся свободных. То есть,
-        // занятыми считаются клетки, которые попали в сокращение доски и
-  корабли,
-        // которые были расставлены.
-        int reduced_board = BOARD_SIZE * ship_type;
-        int position =
-            UniformDist(0, BOARD_SIZE * BOARD_SIZE - reduced_board - placed);
-        // Теперь отситываем от начала доски эту позкрицию,
-        // пропуская занятые и ставим в неё корабль.
-        for (int i = 0; i < BOARD_SIZE * BOARD_SIZE; ++i) {
-          if (board_[i / BOARD_SIZE][i % BOARD_SIZE].mark == ' ' &&
-                  (i % BOARD_SIZE < BOARD_SIZE - count_reduced_board??? &&
-                   !is_vertical) ||
-              (i / BOARD_SIZE < BOARD_SIZE - ???reduced_board??? &&
-  is_vertical)) { if (position <= 0) { board_[i / BOARD_SIZE][i %
-  BOARD_SIZE].mark = 'X'; for (int j = ; j < BOARD_SIZE; ++j)
-            }
-          }
-        }
-      }
-    }
-  }
-  */
 
  private:
   struct Cell {
